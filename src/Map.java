@@ -58,9 +58,9 @@ public class Map {
             for(int i=0; i < h; i++){
                 for(int j=0; j < w; j++) {
                     map[i][j] = Integer.parseInt(allLine[i].substring(j, j+1));
-                    System.out.print("" + map[i][j]);
+                    System.out.print(map[i][j]);
                 }
-                System.out.println("");
+                System.out.println();
             }
         } catch (NumberFormatException e) {
             throw new RuntimeException("GAME INIT ERROR: Invalid map file format.");
