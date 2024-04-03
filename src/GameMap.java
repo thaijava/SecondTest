@@ -12,6 +12,7 @@ public class GameMap {
 
     BlockBackground blockBackground = new BlockBackground();
     BlockWall blockWall = new BlockWall();
+    BlockPlayer blockPlayer = new BlockPlayer();
 
 
     //////////////////////////////////////////////////////////////////
@@ -98,6 +99,7 @@ public class GameMap {
                             bbb = blockWall.getImage();
                             break;
                         case Block.TYPE_PLAYER:
+
                             break;
                         default:
                             bbb = blockBackground.getImage();

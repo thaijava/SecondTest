@@ -5,10 +5,10 @@ public class BlockWall extends Block{
 
     public BlockWall() {
         type = TYPE_WALL;
-        setBlockImage("asset/wall.png");
+        setFile("asset/wall.png");
     }
 
-    public void setBlockImage(String filePath) {
+    public void setFile(String filePath) {
         if(this.image == null){
             image = new BufferedImage(GameMapComponent.TILE_SIZE, GameMapComponent.TILE_SIZE, BufferedImage.TYPE_INT_ARGB);;
         }

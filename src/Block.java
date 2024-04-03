@@ -1,38 +1,37 @@
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.nio.Buffer;
 
 public class Block {
     static final int TYPE_BACKGROUND=0;
     static final int TYPE_WALL=1;
     static final int TYPE_PLAYER=9;
     BufferedImage image;
-    int x, y;
+    int row, column;
     int type = TYPE_BACKGROUND;
 
     public Block() {
     }
 
     public void setLocation(int x, int y){
-        this.x =x;
-        this.y = y;
+        this.column =x;
+        this.row = y;
     }
 
-    public int getX() {
-        return x;
+    public int getRow() {
+        return row;
     }
 
-    public int getY() {
-        return y;
+    public int getColumn() {
+        return column;
     }
 
     public int getType() {
         return type;
     }
 
-    public void setBlockImage(String filePath) {
+    public void setFile(String filePath) {
         if(this.image == null){
-            image = new BufferedImage(GameMapComponent.TILE_SIZE, GameMapComponent.TILE_SIZE, BufferedImage.TYPE_INT_ARGB);;
+            image = new BufferedImage(GameMapComponent.TILE_SIZE, GameMapComponent.TILE_SIZE, BufferedImage.TYPE_INT_ARGB);
         }
 
         Graphics g = image.getGraphics();
