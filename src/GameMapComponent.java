@@ -4,8 +4,8 @@ import java.awt.*;
 
 public class GameMapComponent extends JComponent {
     public static int BASE_TILE_SIZE  = 16; // one block 16x16
-    public static int  scale = 3;
-    public static int TILE_SIZE = BASE_TILE_SIZE * scale;
+    public static double  scale = 2.5;
+    public static int TILE_SIZE = (int)(BASE_TILE_SIZE * scale);
 
 
     GameMap map = new GameMap();
