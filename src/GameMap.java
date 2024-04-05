@@ -1,18 +1,20 @@
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.util.Random;
 import java.util.StringTokenizer;
 
-public class GameMap {
+public class GameMap implements Serializable{
     int row;
     BufferedImage backgroundImage;
     int column;
     String fileName = "map.txt";
     int mapData[][];
 
+    Car player;
+
     BlockBackground blockBackground = new BlockBackground();
     BlockWall blockWall = new BlockWall();
-    BlockPlayer blockPlayer = new BlockPlayer();
 
 
     //////////////////////////////////////////////////////////////////
@@ -24,6 +26,13 @@ public class GameMap {
         }
 
     }
+
+    public GameMap(int[][] mapData) {
+        row = mapData.length;
+        column = mapData[0].length;
+        this.mapData = mapData;
+    }
+
 
     private void initMapFromFile() throws IOException {
         BufferedReader br = new BufferedReader(new FileReader(fileName));
@@ -53,7 +62,7 @@ public class GameMap {
                 }
 
                 allLine[j] = allLine[j].replace(" ", "0");
-                System.out.println(allLine[j]);
+
             }
 
             mapData = new int[row][column];
@@ -89,6 +98,8 @@ public class GameMap {
             Graphics g = backgroundImage.getGraphics();
             g.setColor(Color.black);
             g.fillRect(0, 0, w, h);
+            BufferedImage blockBackgroundImage = null;
+            BufferedImage wallImage = null;
 
             ///    firsttime background image creat
             BufferedImage bbb = null;
@@ -96,17 +107,21 @@ public class GameMap {
                 for (int j = 0; j < column; j++) {
                     switch (mapData[i][j]) {
                         case Block.TYPE_WALL:
-                            bbb = blockWall.getImage();
+                            if(blockBackgroundImage == null)
+                                blockBackgroundImage = blockWall.getImage();
+                            bbb = blockBackgroundImage;
                             break;
-                        case Block.TYPE_PLAYER:
 
-                            break;
                         default:
-                            bbb = blockBackground.getImage();
+                            if(wallImage == null)
+                                wallImage = blockBackground.getImage();
+
+                            bbb = wallImage;
 
                     }
                     System.out.print(mapData[i][j]);
-                    g.drawImage(bbb, j * GameMapComponent.TILE_SIZE, i * GameMapComponent.TILE_SIZE, null);
+                    g.drawImage(bbb, j * GameMapComponent.TILE_SIZE, i * GameMapComponent.TILE_SIZE,
+                            GameMapComponent.TILE_SIZE, GameMapComponent.TILE_SIZE, null);
                 }
                 System.out.println();
             }
@@ -115,7 +130,44 @@ public class GameMap {
         return backgroundImage;
     }
 
+
+    public Car registerCar(Car car) {
+
+        Random r = new Random();
+        int randomCol = r.nextInt(column);
+        int randomRow = r.nextInt(row);
+
+        while(mapData[randomRow][randomCol] != Block.TYPE_BACKGROUND) {
+            randomCol = r.nextInt(column);
+            randomRow  = r.nextInt(row);
+
+        }
+
+        player = car;
+        car.setLocation(randomRow, randomCol);
+        return car;
+    }
+
+    public boolean canUp() {
+        if(player == null)
+            return true;
+
+        try {
+            if(mapData[player.getRow() -1][player.getColumn()] == Block.TYPE_WALL) {
+                System.out.println(player);
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+
+        return  true;
+    }
     public static void main(String[] args) {
-        GameMap m = new GameMap();
+        GameMap map = new GameMap();
+
+        Car c = map.registerCar(new Car(map));
+
+        System.out.println(c);
     }
 }
