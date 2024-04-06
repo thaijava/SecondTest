@@ -5,6 +5,8 @@ public class Car extends Block {
 
     int x, y;
 
+    int headAngle=0;
+
     public Car(GameMap gameMap) {
         this.gameMap = gameMap;
 
@@ -55,9 +57,11 @@ public class Car extends Block {
         return y;
     }
 
+    public int getHeadAngle() { return headAngle; }
+
 
     public void moveUp() {
-
+        headAngle = 0;
 
         int mapData[][] = gameMap.getMapData();
         try {
@@ -73,6 +77,8 @@ public class Car extends Block {
     }
 
     public void moveDown() {
+        headAngle = 180;
+
         int mapData[][] = gameMap.getMapData();
         try {
             if (mapData[row + 1][column] == Block.TYPE_WALL && y > row * GameMapComponent.TILE_SIZE)
@@ -86,6 +92,8 @@ public class Car extends Block {
     }
 
     public void moveLeft() {
+        headAngle = 270;
+
         int mapData[][] = gameMap.getMapData();
         try {
             if (mapData[row ][column -1] == Block.TYPE_WALL && x < column * GameMapComponent.TILE_SIZE)
@@ -102,6 +110,8 @@ public class Car extends Block {
     }
 
     public void moveRight() {
+        headAngle = 90;
+
         int mapData[][] = gameMap.getMapData();
         try {
             if (mapData[row ][column +1] == Block.TYPE_WALL && x > column * GameMapComponent.TILE_SIZE)

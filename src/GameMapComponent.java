@@ -9,6 +9,8 @@ public class GameMapComponent extends JPanel implements Runnable{
     public static int TILE_SIZE = (int)(BASE_TILE_SIZE * scale);
 
     int fps = 65;                                               //       FPS
+    int TARGET_TIME = 1000000000/fps;
+
     Car player = null;
     BufferedImage playerImage=null;
 
@@ -29,7 +31,7 @@ public class GameMapComponent extends JPanel implements Runnable{
         componentThread.start();
     }
 
-    public void update() {
+    private void readKey() {
         if (keyState.upPressed) {
             player.moveUp();
         } else if (keyState.downPressed)
@@ -43,33 +45,25 @@ public class GameMapComponent extends JPanel implements Runnable{
 
 
     public void run() {
-        double drawInterval = 1000000000 / fps;
-        double delta = 0;
-        long lastTime = System.nanoTime();
-        long currentTime ;
 
-        long timer=0;
-        int drawCount=0;
+        long currentTime ;
 
         while(componentThread != null) {
             currentTime = System.nanoTime();
-            delta += (currentTime - lastTime) / drawInterval;
-            timer += (currentTime - lastTime);
+            readKey();
+            repaint();
 
-            if(delta >= 1) {
-                update();
-                repaint();
-                delta--;
-                drawCount++;
+            long timeConsume = System.nanoTime()- currentTime;
+            if(timeConsume < TARGET_TIME){
+                long sleepTime = (TARGET_TIME - timeConsume)/ 1000000;
+
+                try {
+                    Thread.sleep(sleepTime);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
             }
 
-            if(timer >= 1000000000) {
-                System.out.println( drawCount + " FPS,  player:" + player);
-                drawCount =0;
-                timer=0;
-            }
-
-            lastTime = currentTime;
         }
     }
 
