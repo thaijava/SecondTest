@@ -22,7 +22,6 @@ public class GameMapComponent extends JPanel implements Runnable{
     public GameMapComponent(){
         init();  // graphic component size
 
-
     }
 
 
@@ -105,6 +104,7 @@ public class GameMapComponent extends JPanel implements Runnable{
         TILE_SIZE = (int)(BASE_TILE_SIZE * scale);
 
     }
+
     public static void main(String[] args) {
         JFrame f = new JFrame();
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

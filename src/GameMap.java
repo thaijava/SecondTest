@@ -148,21 +148,6 @@ public class GameMap implements Serializable{
         return car;
     }
 
-    public boolean canUp() {
-        if(player == null)
-            return true;
-
-        try {
-            if(mapData[player.getRow() -1][player.getColumn()] == Block.TYPE_WALL) {
-                System.out.println(player);
-                return false;
-            }
-        } catch (Exception e) {
-            return false;
-        }
-
-        return  true;
-    }
     public static void main(String[] args) {
         GameMap map = new GameMap();
 
