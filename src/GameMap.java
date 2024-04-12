@@ -1,7 +1,6 @@
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.util.Random;
 import java.util.StringTokenizer;
 
 public class GameMap implements Serializable{
@@ -9,28 +8,30 @@ public class GameMap implements Serializable{
     BufferedImage backgroundImage;
     int column;
     String fileName = "map.txt";
+
     int mapData[][];
 
-    Car player;
+    Car car;
+
 
     BlockBackground blockBackground = new BlockBackground();
     BlockWall blockWall = new BlockWall();
 
 
     //////////////////////////////////////////////////////////////////
-    public GameMap() {
-        try {
+    public GameMap() throws IOException {
+
             initMapFromFile();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+
 
     }
 
     public GameMap(int[][] mapData) {
         row = mapData.length;
         column = mapData[0].length;
+
         this.mapData = mapData;
+        backgroundImage = null;
     }
 
 
@@ -72,21 +73,30 @@ public class GameMap implements Serializable{
                 }
             }
         } catch (NumberFormatException e) {
-            throw new RuntimeException("GAME INIT ERROR: Invalid map file format.");
+            throw new RuntimeException(">>>> GAMEMAP INIT mapfile ERROR: Invalid map file format.");
         }
 
     }
 
-    public int getRow() {
+    public int getRowSize() {
         return row;
     }
 
-    public int getColumn() {
+    public int getColumnSize() {
         return column;
     }
 
-    public int[][] getMapData() {
+    public  int[][] getMapData() {
         return mapData;
+    }
+
+    public boolean isWallType(int r, int c) throws IndexOutOfBoundsException {
+        if(mapData[r][c] == Block.TYPE_WALL) return true;
+        return false;
+    }
+     public boolean isBackgroundType(int r, int c) throws IndexOutOfBoundsException {
+            if(mapData[r][c] == Block.TYPE_BACKGROUND) return true;
+            return false;
     }
 
     public BufferedImage getBackgroundImage() {
@@ -94,6 +104,7 @@ public class GameMap implements Serializable{
         int h = row * GameMapComponent.TILE_SIZE;
 
         if (this.backgroundImage == null) {
+            System.out.println(">>>> GameMap.java REBUILD MAP.");
             backgroundImage = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
             Graphics g = backgroundImage.getGraphics();
             g.setColor(Color.black);
@@ -119,11 +130,11 @@ public class GameMap implements Serializable{
                             bbb = wallImage;
 
                     }
-                    System.out.print(mapData[i][j]);
+
                     g.drawImage(bbb, j * GameMapComponent.TILE_SIZE, i * GameMapComponent.TILE_SIZE,
                             GameMapComponent.TILE_SIZE, GameMapComponent.TILE_SIZE, null);
                 }
-                System.out.println();
+
             }
         }
 
@@ -131,28 +142,18 @@ public class GameMap implements Serializable{
     }
 
 
-    public Car registerCar(Car car) {
-
-        Random r = new Random();
-        int randomCol = r.nextInt(column);
-        int randomRow = r.nextInt(row);
-
-        while(mapData[randomRow][randomCol] != Block.TYPE_BACKGROUND) {
-            randomCol = r.nextInt(column);
-            randomRow  = r.nextInt(row);
-
-        }
-
-        player = car;
-        car.setLocation(randomRow, randomCol);
-        return car;
-    }
 
     public static void main(String[] args) {
-        GameMap map = new GameMap();
+        try {
+            GameMap map = new GameMap();
+            MapServer server = new MapServer(map, 8888);
+            server.startAccept();
 
-        Car c = map.registerCar(new Car(map));
+            Car c = new Car();
 
-        System.out.println(c);
+            System.out.println(c);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

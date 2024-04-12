@@ -2,7 +2,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
 
-public class Block {
+public class Block implements  Serializable{
     static final int TYPE_BACKGROUND=0;
     static final int TYPE_WALL=1;
     static final int TYPE_CAR=9;
@@ -38,7 +38,7 @@ public class Block {
             ImageIO.write(tmp, "png", bufferOutput);
             imageByte = bufferOutput.toByteArray();
         } catch (IOException e) {
-            System.out.println("ERROR:  can read block image file:" + filePath);
+            System.out.println(">>>> BLOCK NEW() ERROR:  can read image file:" + filePath);
             e.printStackTrace();
         }
 
